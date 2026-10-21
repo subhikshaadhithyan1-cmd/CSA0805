@@ -1,1 +1,73 @@
+# Task 12: Day-4 Design Challenge Engine
+from decimal import Decimal, ROUND_HALF_UP
+
+STEP = Decimal("0.10")
+STANDARD_FAT = Decimal("3.50")
+STANDARD_SNF = Decimal("8.50")
+
+RATE_CARDS = {
+    "regular": {
+        "base": Decimal("30.00"),
+        "fat": Decimal("0.40")
+    },
+    "april_june": {
+        "base": Decimal("32.00"),
+        "fat": Decimal("0.45")
+    }
+}
+
+SNF_VALUE = Decimal("0.30")
+BONUS_LIMIT = Decimal("500")
+BONUS_RATE = Decimal("0.50")
+
+def round_steps(value):
+    return (value / STEP).quantize(Decimal("1"), rounding=ROUND_HALF_UP)
+
+def rate_per_litre(fat, snf, season="regular"):
+    fat = Decimal(str(fat))
+    snf = Decimal(str(snf))
+    
+    if season not in RATE_CARDS:
+        raise ValueError("Invalid season specified")
+    if not (Decimal("2.00") <= fat <= Decimal("7.00")):
+        raise ValueError("Invalid fat percentage")
+    if snf < Decimal("0.0"):
+        raise ValueError("Invalid SNF percentage")
+        
+    card = RATE_CARDS[season]
+    fat_steps = round_steps(fat - STANDARD_FAT)
+    snf_steps = round_steps(snf - STANDARD_SNF)
+    
+    rate = card["base"] + (fat_steps * card["fat"]) + (snf_steps * SNF_VALUE)
+    return rate.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+
+def payout(litres, fat, snf, season="regular"):
+    litres = Decimal(str(litres))
+    if litres < Decimal("0.0"):
+        raise ValueError("Invalid litres quantity")
+    rate = rate_per_litre(fat, snf, season)
+    return (litres * rate).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+
+def ten_day_payment(entries, season="regular"):
+    total_litres = sum((Decimal(str(e[0])) for e in entries), Decimal("0"))
+    base_total = sum((payout(*e, season=season) for e in entries), Decimal("0.00"))
+    
+    bonus = Decimal("0.00")
+    if total_litres > BONUS_LIMIT:
+        bonus = (total_litres * BONUS_RATE).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+        
+    final_total = base_total + bonus
+    return base_total, bonus, final_total
+
+if __name__ == "__main__":
+    # Test entries exceeding 500 L threshold
+    entries = [
+        ("250.00", "4.25", "8.65"),
+        ("260.50", "3.55", "8.50")
+    ]
+    
+    base, bonus, final = ten_day_payment(entries, season="april_june")
+    print(f"Seasonal Base Payment : Rs. {base}")
+    print(f"Volume Incentive Bonus: Rs. {bonus}")
+    print(f"Final Total Payment   : Rs. {final}")
 
