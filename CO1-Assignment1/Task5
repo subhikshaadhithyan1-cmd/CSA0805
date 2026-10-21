@@ -1,1 +1,38 @@
+# Task 5: User Input Conversion and Validation
+def get_user_entry():
+    raw_litres = input("Enter litres: ").strip().replace(',', '.')
+    raw_fat = input("Enter fat %: ").strip().replace(',', '.')
+    raw_snf = input("Enter SNF %: ").strip().replace(',', '.')
 
+    try:
+        litres = float(raw_litres)
+        fat = float(raw_fat)
+        snf = float(raw_snf)
+    except ValueError:
+        print("Error: Non-numeric input entered.")
+        return
+
+    if litres < 0:
+        print("Invalid litres: Quantity cannot be negative.")
+    elif not (2.0 <= fat <= 7.0):
+        print(f"Invalid fat: {fat}% is outside allowed range [2.0, 7.0].")
+    elif not (5.0 <= snf <= 12.0):
+        print(f"Invalid SNF: {snf}% is outside allowed range [5.0, 12.0].")
+    else:
+        fat_steps = round((fat - 3.5) / 0.1)
+        snf_steps = round((snf - 8.5) / 0.1)
+        rate = 30.00 + (fat_steps * 0.40) + (snf_steps * 0.30)
+        payment = round(litres * rate, 2)
+        
+        print("\n" + "=" * 40)
+        print(f"{'RECEIPT SUMMARY':^40}")
+        print("=" * 40)
+        print(f"Litres Delivered : {litres:10.2f} L")
+        print(f"Fat Percentage   : {fat:10.1f} %")
+        print(f"SNF Percentage   : {snf:10.1f} %")
+        print(f"Rate Per Litre   : Rs. {rate:7.2f}")
+        print(f"Total Payment    : Rs. {payment:7.2f}")
+        print("=" * 40)
+
+if __name__ == "__main__":
+    get_user_entry()
