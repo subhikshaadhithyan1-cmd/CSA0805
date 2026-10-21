@@ -20,4 +20,3 @@ for farmer_id, litres, fat, snf in entries:
 
 print("-" * 50)
 print(f"Total Ten-Day Payout: Rs. {round(total, 2):.2f}")
-
