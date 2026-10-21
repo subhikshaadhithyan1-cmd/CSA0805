@@ -1,1 +1,24 @@
+# Task 4: Expressions, Precision Quirks, and Rounding Analysis
+import math
 
+fat = 4.2
+snf = 8.7
+litres = 8.5
+
+# Step and payout expressions
+fat_steps = round((fat - 3.5) / 0.1)
+snf_steps = round((snf - 8.5) / 0.1)
+
+rate = 30.00 + (fat_steps * 0.40) + (snf_steps * 0.30)
+payment = round(litres * rate, 2)
+
+print(f"Fat steps: {fat_steps} | SNF steps: {snf_steps}")
+print(f"Calculated Rate: Rs. {round(rate, 2):.2f}")
+print(f"Calculated Payment: Rs. {payment:.2f}")
+
+# Demonstrating the 3 Unexpected Results
+print("\n--- Unexpected Floating-Point Evaluation Results ---")
+print("1. (4.2 - 3.5) / 0.1        =", (4.2 - 3.5) / 0.1)
+print("2. math.floor(-7 / 2) vs int =", math.floor(-7 / 2), "vs", int(-7 / 2))
+print("3. -2 ** 2 vs (-2) ** 2      =", -2 ** 2, "vs", (-2) ** 2)
+print("4. Float Addition (0.1+0.2)   =", 0.1 + 0.2)
