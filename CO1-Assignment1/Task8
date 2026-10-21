@@ -1,1 +1,29 @@
+BEGIN CALCULATE_TEN_DAY_PAYMENT
+    INIT total_payment = 0.0
+    INIT CONSTANT BASE_RATE = 30.00
+    INIT CONSTANT FAT_STEP_VAL = 0.40
+    INIT CONSTANT SNF_STEP_VAL = 0.30
+    
+    FOR entry = 1 TO N DO
+        READ farmer_id, litres, fat, snf
+        
+        IF litres <= 0 OR fat < 2.0 OR fat > 7.0 OR snf < 5.0 OR snf > 12.0 THEN
+            DISPLAY "Invalid Entry"
+            CONTINUE
+        ENDIF
+        
+        fat_steps = ROUND((fat - 3.5) / 0.1)
+        snf_steps = ROUND((snf - 8.5) / 0.1)
+        
+        rate = BASE_RATE + (fat_steps * FAT_STEP_VAL) + (snf_steps * SNF_STEP_VAL)
+        rate = ROUND(rate, 2)
+        
+        amount = litres * rate
+        amount = ROUND(amount, 2)
+        
+        total_payment = total_payment + amount
+    ENDFOR
+    
+    DISPLAY total_payment
+END
 
