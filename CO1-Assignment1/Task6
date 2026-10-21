@@ -1,1 +1,57 @@
+# Task 6: Functional Decomposition and Scope Rules
 
+BASE_RATE = 30.00  # Global Constant
+
+def rate_per_litre(fat: float, snf: float) -> float:
+    """Calculates price per litre based on Fat and SNF percentages.
+
+    Args:
+        fat (float): Fat percentage.
+        snf (float): SNF percentage.
+
+    Returns:
+        float: Computed rate per litre rounded to 2 decimal places.
+    """
+    fat_steps = round((fat - 3.5) / 0.1)
+    snf_steps = round((snf - 8.5) / 0.1)
+    rate = BASE_RATE + (fat_steps * 0.40) + (snf_steps * 0.30)
+    return round(rate, 2)
+
+def payout(litres: float, fat: float, snf: float) -> float:
+    """Computes total payment amount for a milk entry.
+
+    Args:
+        litres (float): Volume in litres.
+        fat (float): Fat percentage.
+        snf (float): SNF percentage.
+
+    Returns:
+        float: Total payout amount rounded to 2 decimal places.
+    """
+    return round(litres * rate_per_litre(fat, snf), 2)
+
+def ten_day_total(entries: list[tuple[float, float, float]]) -> float:
+    """Calculates ten-day aggregate payout across collection shifts.
+
+    Args:
+        entries (list): List of tuples containing (litres, fat, snf).
+
+    Returns:
+        float: Summed payment total rounded to 2 decimal places.
+    """
+    total = 0.0
+    for litres, fat, snf in entries:
+        total += payout(litres, fat, snf)
+    return round(total, 2)
+
+if __name__ == "__main__":
+    entries = [
+        (10.0, 3.5, 8.5),
+        (8.5, 4.2, 8.7),
+        (12.0, 3.1, 8.3)
+    ]
+    
+    for entry in entries:
+        print(f"Single Payment: Rs. {payout(*entry):.2f}")
+        
+    print(f"Ten-Day Total : Rs. {ten_day_total(entries):.2f}")
