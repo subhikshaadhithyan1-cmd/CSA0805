@@ -1,29 +1,23 @@
-BEGIN CALCULATE_TEN_DAY_PAYMENT
-    INIT total_payment = 0.0
-    INIT CONSTANT BASE_RATE = 30.00
-    INIT CONSTANT FAT_STEP_VAL = 0.40
-    INIT CONSTANT SNF_STEP_VAL = 0.30
-    
-    FOR entry = 1 TO N DO
-        READ farmer_id, litres, fat, snf
-        
-        IF litres <= 0 OR fat < 2.0 OR fat > 7.0 OR snf < 5.0 OR snf > 12.0 THEN
-            DISPLAY "Invalid Entry"
-            CONTINUE
-        ENDIF
-        
-        fat_steps = ROUND((fat - 3.5) / 0.1)
-        snf_steps = ROUND((snf - 8.5) / 0.1)
-        
-        rate = BASE_RATE + (fat_steps * FAT_STEP_VAL) + (snf_steps * SNF_STEP_VAL)
-        rate = ROUND(rate, 2)
-        
-        amount = litres * rate
-        amount = ROUND(amount, 2)
-        
-        total_payment = total_payment + amount
-    ENDFOR
-    
-    DISPLAY total_payment
-END
+# Task 8: Algorithmic Implementation and Hand Trace Verification
+entries = [
+    (10.0, 3.5, 8.5),
+    (8.5, 4.2, 8.7),
+    (12.0, 3.1, 8.3)
+]
 
+total = 0.0
+for litres, fat, snf in entries:
+    if litres < 0 or not (2.0 <= fat <= 7.0) or not (5.0 <= snf <= 12.0):
+        print("Invalid entry skipped")
+        continue
+        
+    fat_steps = round((fat - 3.5) / 0.1)
+    snf_steps = round((snf - 8.5) / 0.1)
+    
+    rate = 30.00 + (fat_steps * 0.40) + (snf_steps * 0.30)
+    payment = round(litres * rate, 2)
+    total += payment
+    
+    print(f"Rate: Rs. {round(rate, 2):.2f} | Payment: Rs. {payment:.2f}")
+
+print(f"Total Ten-Day Payment: Rs. {round(total, 2):.2f}")
