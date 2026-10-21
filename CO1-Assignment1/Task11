@@ -1,1 +1,33 @@
+# Task 11: Recommended Production Payment Engine
+from decimal import Decimal, ROUND_HALF_UP
+
+BASE_RATE = Decimal("30.00")
+FAT_VALUE = Decimal("0.40")
+SNF_VALUE = Decimal("0.30")
+
+def rate_per_litre(fat, snf):
+    fat = Decimal(str(fat))
+    snf = Decimal(str(snf))
+    
+    if not (Decimal("2.0") <= fat <= Decimal("7.0")):
+        raise ValueError("Invalid fat percentage")
+    if snf < Decimal("0.0"):
+        raise ValueError("Invalid SNF percentage")
+        
+    fat_steps = ((fat - Decimal("3.5")) / Decimal("0.1")).quantize(Decimal("1"), rounding=ROUND_HALF_UP)
+    snf_steps = ((snf - Decimal("8.5")) / Decimal("0.1")).quantize(Decimal("1"), rounding=ROUND_HALF_UP)
+    
+    rate = BASE_RATE + (fat_steps * FAT_VALUE) + (snf_steps * SNF_VALUE)
+    return rate.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+
+def payout(litres, fat, snf):
+    litres = Decimal(str(litres))
+    if litres < Decimal("0.0"):
+        raise ValueError("Invalid litres quantity")
+    payment = litres * rate_per_litre(fat, snf)
+    return payment.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+
+if __name__ == "__main__":
+    pay = payout("8.5", "4.2", "8.7")
+    print(f"Recommended Calculator Payment Result: Rs. {pay}")
 
