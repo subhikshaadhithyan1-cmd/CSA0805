@@ -1,25 +1,16 @@
-# Task 3: Variables, Constants, Dynamic Typing and Rate Cards
-
-# PEP 8 Named Constants
 BASE_RATE = 30.00
 BASE_FAT = 3.5
 BASE_SNF = 8.5
 FAT_STEP_VALUE = 0.40
 SNF_STEP_VALUE = 0.30
-
-# Dynamic Typing Demonstration
 val = 10
 print(f"Initial val: {val} | Type: {type(val)}")
 val = "Thirty Rupees"
 print(f"Reassigned val: {val} | Type: {type(val)}")
-
-# Multiple Assignment and Swapping
 a, b = 10, 20
 print(f"Before Swap: a = {a}, b = {b}")
 a, b = b, a
 print(f"After Swap : a = {a}, b = {b}")
-
-# Dictionary Rate Card Alternative
 RATE_CARD = {
     "base_rate": 30.00,
     "base_fat": 3.5,
@@ -27,5 +18,4 @@ RATE_CARD = {
     "fat_step": 0.40,
     "snf_step": 0.30
 }
-
 print(f"Rate Card Dictionary: {RATE_CARD}")
