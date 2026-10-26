@@ -1,22 +1,16 @@
-Task 1: Problem Analysis and Data Identification
 BASE_RATE = 30.00
-
 entries = [
     ("F001", 10.0, 3.5, 8.5),
     ("F002", 8.5, 4.2, 8.7),
     ("F003", 12.0, 3.1, 8.3)
 ]
-
 total = 0.0
 for farmer_id, litres, fat, snf in entries:
     fat_steps = round((fat - 3.5) / 0.1)
     snf_steps = round((snf - 8.5) / 0.1)
-    
     rate = BASE_RATE + (fat_steps * 0.40) + (snf_steps * 0.30)
     payment = round(litres * rate, 2)
-    total += payment
-    
+    total += payment  
     print(f"Farmer: {farmer_id} | Rate: Rs. {rate:.2f} | Payment: Rs. {payment:.2f}")
-
 print("-" * 50)
 print(f"Total Ten-Day Payout: Rs. {round(total, 2):.2f}")
