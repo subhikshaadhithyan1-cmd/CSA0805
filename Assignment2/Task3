@@ -1,1 +1,33 @@
+def normalise(text):
+    return text.replace(" ", "").replace("-", "").upper()
 
+
+def is_valid(reg):
+    if len(reg) not in (9, 10):
+        return False
+    state = reg[0:2]
+    district = reg[2:4]
+    series = reg[4:-4]
+    number = reg[-4:]
+    return (
+        len(state) == 2 and state.isalpha()
+        and len(district) == 2 and district.isdigit()
+        and len(series) in (1, 2) and series.isalpha()
+        and len(number) == 4 and number.isdigit()
+    )
+
+
+def format_reg(reg):
+    if not is_valid(reg):
+        return "INVALID"
+    return reg[0:2] + " " + reg[2:4] + " " + reg[4:-4] + " " + reg[-4:]
+
+
+for raw in ["tn 09 ab 1234", "KA-01-M-0007", "TN9AB1234", "TN 22 1234 AB"]:
+    reg = normalise(raw)
+    print(
+        f"{raw:15} -> {reg:11} "
+        f"{'valid' if is_valid(reg) else 'INVALID'}"
+    )
+    if is_valid(reg):
+        print("Receipt:", format_reg(reg))
