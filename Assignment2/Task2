@@ -1,1 +1,22 @@
+def verify_recursive(correct_otp, attempts_left):
+    if attempts_left == 0:
+        print("Account locked for 30 minutes.")
+        return
+    
+    entered = input("Enter OTP: ").strip()
+    
+    if entered == "":
+        print("Blank entry: not counted.")
+        return verify_recursive(correct_otp, attempts_left)
+    
+    if entered == correct_otp:
+        print("OTP verified.")
+        return
+    
+    print("Incorrect OTP.")
+    return verify_recursive(correct_otp, attempts_left - 1)
 
+
+# Example usage (3 attempts to enter "4829")
+if __name__ == "__main__":
+    verify_recursive("4829", 3)
