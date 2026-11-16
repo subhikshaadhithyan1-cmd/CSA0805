@@ -1,1 +1,43 @@
+import time
 
+
+def build_plus(parts):
+    text = ""
+    for part in parts:
+        text += part + ";"
+    return text
+
+
+def build_join(parts):
+    return ";".join(parts) + ";"
+
+
+def build_fstring(parts):
+    lines = [f"{part};" for part in parts]
+    return "".join(lines)
+
+
+def benchmark(n, repeats=3):
+    items = [f"Item{i}:Rs{i % 50}" for i in range(n)]
+    functions = [
+        ("plus", build_plus),
+        ("join", build_join),
+        ("fstring", build_fstring),
+    ]
+    times = {name: [] for name, _ in functions}
+    outputs = {}
+
+    for _ in range(repeats):
+        for name, func in functions:
+            start = time.perf_counter()
+            outputs[name] = func(items)
+            times[name].append(time.perf_counter() - start)
+
+    assert outputs["plus"] == outputs["join"] == outputs["fstring"]
+
+    for name, values in times.items():
+        print(n, name, "runs:", values, "average:", sum(values) / len(values))
+
+
+for size in (1000, 10000, 200000):
+    benchmark(size)
