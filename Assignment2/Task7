@@ -1,1 +1,38 @@
+from functools import lru_cache
+import time
 
+
+@lru_cache(maxsize=None)
+def ways_memo_q7(n):
+    if n <= 1:
+        return 1
+    return ways_memo_q7(n - 1) + ways_memo_q7(n - 2)
+
+
+def ways_iterative_q7(n):
+    if n <= 1:
+        return 1
+    a, b = 1, 1
+    for _ in range(2, n + 1):
+        a, b = b, a + b
+    return b
+
+
+for n in (10, 25, 100, 1000):
+    ways_memo_q7.cache_clear()
+    start = time.perf_counter()
+    memo_result = ways_memo_q7(n)
+    memo_time = time.perf_counter() - start
+
+    start = time.perf_counter()
+    loop_result = ways_iterative_q7(n)
+    loop_time = time.perf_counter() - start
+
+    print(
+        n,
+        memo_result == loop_result,
+        f"memo={memo_time:.6f}s",
+        f"loop={loop_time:.6f}s",
+        "digits=",
+        len(str(loop_result)),
+    )
